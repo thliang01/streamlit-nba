@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2020 thliang01
+# Copyright 2020 Thomas
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -100,6 +100,34 @@ st.pyplot(
         label_col='PLAYER_NAME',
         max_plot=10))
 
+st.markdown('---')
+
+st.header('Is most game played means most time played ?')
+
+
+def convert_min(x):
+    if pd.isna(x):
+        return 0
+    x = str(x).split(':')
+    if len(x) < 2:
+        return int(x[0])
+    else:
+        return int(x[0]) * 60 + int(x[1])
+
+
+df_tmp = games_details[['PLAYER_NAME', 'MIN']]
+df_tmp.loc[:, 'MIN'] = df_tmp['MIN'].apply(convert_min)
+agg = df_tmp.groupby('PLAYER_NAME').agg('sum').reset_index()
+agg.columns = ['PLAYER_NAME', 'Number of seconds played']
+
+st.pyplot(
+    plot_top(
+        agg,
+        column='Number of seconds played',
+        label_col='PLAYER_NAME',
+        max_plot=10))
+
+st.markdown('And the answer is yes ! LeBron James is truly a living legend !')
 st.markdown('---')
 
 
