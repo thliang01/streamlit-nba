@@ -21,6 +21,8 @@
 
 # More info: https://github.com/thliang01/streamlit-nba
 
+import urllib
+import os
 import datetime
 import seaborn as sns
 import streamlit as st
@@ -52,15 +54,28 @@ df = pd.read_csv('data/NBA2K/nba2k20-full.csv')
 
 # ----- ----- -----
 
+# Streamlit encourages well-structured code, like starting execution in a main() function.
+# def main():
+#     # Render the readme as markdown using st.markdown.
+#     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
+
+
 st.title('NBA games Data Visualization')
-st.header('Dataset with all NBA games'
-          ' from 2004 season to dec 2020')
+"""
+### Dataset with all NBA games from 2004 season to dec 2020
+---
+"""
+
+st.header('Who are the players with most games played ?')
+
+# Download a single file and make its content available as a string.
 
 
-st.title('Who are the players '
-         'with most games played ?')
-
-# * optional kwarg unsafe_allow_html = True
+# @st.cache(show_spinner=False)
+# def get_file_content_as_string(path):
+#     url = 'https://github.com/thliang01/streamlit-nba/master/' + path
+#     response = urllib.request.urlopen(url)
+#     return response.read().decode("utf-8")
 
 
 # if __name__ == "__main__":
