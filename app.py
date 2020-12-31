@@ -23,35 +23,55 @@
 
 import urllib
 import os
-import datetime
 import seaborn as sns
 import streamlit as st
 import pandas as pd
 import numpy as np
 from math import pi
 import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.graph_objects as go
+import plotly.express as px
+from plotly.subplots import make_subplots
+from datetime import datetime
+from datetime import date
+import plotly.figure_factory as ff
 plt.style.use('fivethirtyeight')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
+st.title('NBA Data Visualization')
+
 # ----- Load data -----
 
+st.markdown('## Load data')
+
 games_details = pd.read_csv('data/NBA-games-data/games_details.csv')
+if st.checkbox('Show games_details'):
+    st.write(games_details.head(10))
 # st.dataframe(games_details.head(5))
 
 players = pd.read_csv('data/NBA-games-data/players.csv')
+if st.checkbox('Show players'):
+    st.write(players.head(10))
 # st.dataframe(players.head(5))
 
 teams = pd.read_csv('data/NBA-games-data/teams.csv')
+if st.checkbox('Show teams'):
+    st.write(teams.head(10))
 # st.dataframe(teams.head(5))
 
 ranking = pd.read_csv('data/NBA-games-data/ranking.csv')
+if st.checkbox('Show ranking'):
+    st.write(ranking.head(10))
 # st.dataframe(ranking.head(5))
 
 games = pd.read_csv('data/NBA-games-data/games.csv')
+if st.checkbox('Show games'):
+    st.write(games.head(10))
 # st.dataframe(games.head(5))
 
-df = pd.read_csv('data/NBA2K/nba2k20-full.csv')
+data = pd.read_csv('data/NBA2K/nba2k20-full.csv')
+if st.checkbox('Show nba2k20'):
+    st.write(games.data(10))
 # st.write(df.head(5))
 
 # ----- ----- -----
@@ -86,7 +106,7 @@ def plot_top(df, column, label_col=None, max_plot=5):
     plt.xlabel(label_col)
     plt.ylabel(column)
     plt.title(f'Top {max_plot} of {column}')
-    plt.show()
+    # plt.show()
 
 
 players_name = games_details['PLAYER_NAME']
@@ -261,7 +281,7 @@ ax = plt.subplot(122, polar=True)
 ax.set_title('Others statistics')
 radar_plot(ax=ax, df=stats_other, max_val=10)
 
-st.pyplot(plt.show())
+st.pyplot(fig)
 st.markdown('As we can see Lebron James is above average ! ')
 st.markdown('---')
 
@@ -315,7 +335,7 @@ def show_player_stats_comparison(stats_prct, stats_other):
     ax.set_title('Others statistics')
     radar_plot(ax=ax, df=stats_other, max_val=10)
 
-    plt.show()
+    # plt.show()
 
 
 player_one = 'Stephen Curry'
@@ -380,11 +400,219 @@ st.pyplot(show_player_stats_comparison(stats_prct, stats_other))
 st.markdown('Where did he played ?')
 
 teams_id = bryant_games['TEAM_ID'].unique()
-bryant_teams = teams[teams['TEAM_ID'].isin(teams_id)]['NICKNAME'].values.tolist()
-st.markdown(f"He played on the following teams : **{' '.join(bryant_teams)}**.")
+bryant_teams = teams[teams['TEAM_ID'].isin(
+    teams_id)]['NICKNAME'].values.tolist()
+st.markdown(
+    f"He played on the following teams : **{' '.join(bryant_teams)}**.")
 st.markdown('---')
+
+st.title('NBA 2K20 Data Visualization')
+"""
+### 400 + NBA 2k20 players with 14 attributes
+"""
+
+data['weight'] = [float(data['weight'][i].split()[3])
+                  for i in range(len(data))]
+data['height'] = [float(data['height'][i].split()[-1])
+                  for i in range(len(data))]
+data['salary'] = [int(data['salary'][i].split('$')[1])
+                  for i in range(len(data))]
+data['jersey'] = [int(data['jersey'][i].split('#')[1])
+                  for i in range(len(data))]
+
+data['b_day'] = data['b_day'].apply(
+    lambda x: datetime.strptime(
+        x, '%m/%d/%y').date())
+data['age'] = (datetime.today().date() - data['b_day']
+               ).astype('<m8[Y]').astype('int64')
+
+data['draft_round'] = data['draft_round'].apply(
+    lambda x: 0 if x == 'Undrafted' else int(x))
+data['draft_peak'] = data['draft_peak'].apply(
+    lambda x: 0 if x == 'Undrafted' else int(x))
+
+data['college'] = data['college'].fillna('No college')
+data['team'] = data['team'].fillna('No team')
+
+# st.dataframe(data.head())
+
+# plt.figure(figsize=(30,15))
+# sns.set(font_scale=1.8)
+# st.pyplot(sns.heatmap(data.corr(),cmap='Blues',annot=True))
 # Download a single file and make its content available as a string.
 
+st.header('Height and weight distriburion')
+
+fig = make_subplots(rows=1, cols=2, specs=[
+                    [{"type": "histogram"}, {"type": "histogram"}]])
+fig.add_trace(go.Histogram(x=data['height'] * 100,
+                           xbins=dict(
+                               start=150,
+                               end=280,
+                               size=3
+),
+    name='height, cm', hovertemplate='Count: %{y}<br>Height: %{x}cm'
+), col=1, row=1)
+fig.add_trace(go.Scatter(x=[data['height'].mean() * 100,
+                            data['height'].mean() * 100],
+                         y=[0,
+                            91],
+                         mode='lines',
+                         name='Mean height',
+                         hovertemplate='Mean: %{x:.2f}'))
+fig.update_layout(hovermode='x')
+fig.add_trace(go.Histogram(x=data['weight'],
+                           xbins=dict(
+                               start=min(data['weight']),
+                               end=max(data['weight']),
+                               size=3
+),
+    name='weight, kg', hovertemplate='Count: %{y}<br>Weight: %{x}kg'
+), col=2, row=1)
+fig.add_trace(go.Scatter(x=[data['weight'].mean(), data['weight'].mean()], y=[0, 91],
+                         mode='lines',
+                         name='Mean weight', hovertemplate='Mean: %{x:.2f}'), col=2, row=1)
+
+fig.update_layout(title={
+    'text': "Height and weight distribution",
+    'y': 0.9,
+    'x': 0.5,
+    'xanchor': 'center',
+    'yanchor': 'top'})
+# fig.show()
+st.plotly_chart(fig)
+
+fig = px.scatter(data, x="weight", y="height",
+                 marginal_x="box", marginal_y="violin",
+                 color_discrete_sequence=['orange']
+                 )
+st.plotly_chart(fig)
+st.markdown('---')
+
+st.header('Country and college distriburion')
+
+country_count = data['country'].value_counts()
+fig = go.Figure(
+    go.Pie(
+        labels=country_count.index,
+        values=country_count.values,
+        hole=0.4,
+        textinfo="none"))
+fig.update_layout(title={
+    'text': "Percentage of players by country",
+    'y': 0.9,
+    'x': 0.5,
+    'xanchor': 'center',
+    'yanchor': 'top'})
+st.plotly_chart(fig)
+st.markdown(
+    'There are about 75% of players from USA and much less from every other country.')
+
+
+college_count = data['college'].value_counts()
+fig = go.Figure(
+    go.Pie(
+        labels=college_count.index,
+        values=college_count.values,
+        hole=0.4,
+        textinfo="none"))
+fig.update_layout(title={
+    'text': "Percentage of players by college",
+    'y': 0.9,
+    'x': 0.5,
+    'xanchor': 'center',
+    'yanchor': 'top'})
+st.plotly_chart(fig)
+st.markdown('About 15% of players are not from college. The highest percents of players have Kentucky and Duke colleges.')
+st.markdown('---')
+
+# st.header('Top-50 players by salary')
+#
+# data['position'] = data['position'].apply(
+#     lambda x: 'F-C' if x == 'C-F' else x)  # union related positions
+# data['position'] = data['position'].apply(lambda x: 'F-G' if x == 'G-F' else x)
+#
+# fig = px.scatter(data.sort_values(by='salary', ascending=False)[:50],
+#                  x="salary", y="age",
+#                  size="rating", color="position",
+#                  title="Top-50 players",
+#                  log_x=True, size_max=20)
+# st.plotly_chart(fig)
+# st.markdown('The most paid players from top-30 are 28+ years old on G and F positions.')
+# st.markdown('---')
+#
+# st.header('Basic regression')
+# fig = px.scatter(
+#     data, x='rating', y='salary', opacity=0.65,
+#     trendline='ols', trendline_color_override='darkblue',
+#     facet_col='position', facet_col_wrap=3, color='salary'
+# )
+# # fig.show()
+# st.plotly_chart(fig)
+#
+# fig = px.scatter(data, x='rating', y='salary', opacity=0.65,
+#                  trendline='ols', trendline_color_override='darkblue',
+#                  facet_col='draft_round', facet_col_wrap=3, color='salary'
+#                 )
+# # fig.show()
+# st.plotly_chart(fig)
+# st.markdown('---')
+
+st.header('Team rating')
+
+data_team = data[['team', 'rating']].groupby('team').mean().reset_index()
+data_team = data_team.sort_values(by='rating', ascending=False)
+
+fig = px.bar(data_team.query("team != 'No team'"),
+             x='team', y='rating', color='team',
+             labels={'rating': 'mean rating of players'},
+             title='Mean rating of players for each team',
+             color_discrete_sequence=px.colors.qualitative.Safe)
+# fig.show()
+st.plotly_chart(fig)
+st.markdown(
+    'The strongest team is '
+    'Los Angeles Clippers'
+    ' with mean rating of players 79.3 and the weakest is '
+    'Detroit Pistons'
+    ' with rating 73.9')
+st.markdown('---')
+
+st.header('Height by country')
+
+data_height = data[['height', 'country']].groupby(
+    'country').mean().reset_index()
+data_height = data_height.sort_values(by='height', ascending=False)
+
+fig = px.bar(data_height,
+             x='country', y='height', color='country',
+             labels={'height': 'mean height of players'},
+             color_discrete_sequence=px.colors.qualitative.Vivid,
+             title='Mean height of each country'
+             )
+st.plotly_chart(fig)
+
+st.markdown('Represents mean height of players for each country. The tallest players are from Austria and the lowest are from Puerto Rico')
+st.markdown('---')
+
+st.header('Salary by draft_round')
+
+fig = px.box(data, x="draft_round", y="salary",
+             color="draft_round",
+             title='Salary exploring by draft_round',
+             points='all'
+             )
+fig.update_traces(quartilemethod="exclusive")
+st.plotly_chart(fig)
+
+st.markdown(
+    """
+draft round 0 (undrafted players): 50 % of salary data is between 1.4M and 4.76, median is 2.56M
+draft round 1: 50 % of salary data is between 2.9M and 15.6, median is 6.5M
+draft round 2: 50 % of salary data is between 1.4M and 8.5, median is 1.7M
+So, the most paid players drom draft round 1, where the max salary is 40.2M. The draft round 2 have bigger range of salary data then data of undrafted players, but median of salary from draft round 2 less by 0.8M.
+""")
+st.markdown('---')
 
 # @st.cache(show_spinner=False)
 # def get_file_content_as_string(path):
@@ -395,3 +623,5 @@ st.markdown('---')
 
 # if __name__ == "__main__":
 #     main()
+
+# st.button('Hello world !!!')
