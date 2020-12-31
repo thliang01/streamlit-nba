@@ -1,4 +1,4 @@
-# NBA Data Visualization on streamlit
+# Streamlit application: NBA Data Visualization
 
 ---
 
