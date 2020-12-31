@@ -356,8 +356,33 @@ st.pyplot(
         column='Number of wins',
         label_col='TEAM NAME',
         max_plot=10))
+st.markdown('---')
 
+st.header('Kobe Bryant NBA story')
+st.markdown('### How many games he played ?')
 
+bryant_games = games_details[games_details['PLAYER_NAME'] == 'Kobe Bryant']
+st.markdown(f'He played **{len(bryant_games)}** games !')
+
+st.markdown(
+    '### What'
+    's his overall statistics and is it better than LeBron James ?')
+
+player_one = 'Kobe Bryant'
+player_two = 'LeBron James'
+# Function code just hide above because it's a repeat from previous part
+stats_prct, stats_other = get_players_stats(
+    player_one=player_one, player_two=player_two)
+
+st.markdown(f'#### Stats comparison between {player_one} and {player_two}')
+st.pyplot(show_player_stats_comparison(stats_prct, stats_other))
+
+st.markdown('Where did he played ?')
+
+teams_id = bryant_games['TEAM_ID'].unique()
+bryant_teams = teams[teams['TEAM_ID'].isin(teams_id)]['NICKNAME'].values.tolist()
+st.markdown(f"He played on the following teams : **{' '.join(bryant_teams)}**.")
+st.markdown('---')
 # Download a single file and make its content available as a string.
 
 
