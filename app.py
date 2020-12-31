@@ -30,7 +30,9 @@ import pandas as pd
 import numpy as np
 from math import pi
 import matplotlib.pyplot as plt
+import seaborn as sns
 plt.style.use('fivethirtyeight')
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # ----- Load data -----
 
@@ -59,7 +61,6 @@ df = pd.read_csv('data/NBA2K/nba2k20-full.csv')
 #     # Render the readme as markdown using st.markdown.
 #     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
 
-
 st.title('NBA games Data Visualization')
 """
 ### Dataset with all NBA games from 2004 season to dec 2020
@@ -67,6 +68,40 @@ st.title('NBA games Data Visualization')
 """
 
 st.header('Who are the players with most games played ?')
+
+
+def plot_top(df, column, label_col=None, max_plot=5):
+    top_df = df.sort_values(column, ascending=False).head(max_plot)
+
+    height = top_df[column]
+    x = top_df.index if label_col is None else top_df[label_col]
+
+    gold, silver, bronze, other = ('#FFA400', '#bdc3c7', '#cd7f32', '#3498db')
+    colors = [gold if i == 0 else silver if i == 1 else bronze if i ==
+              2 else other for i in range(0, len(top_df))]
+
+    fig, ax = plt.subplots(figsize=(18, 7))
+    ax.bar(x, height, color=colors)
+    plt.xticks(x, x, rotation=60)
+    plt.xlabel(label_col)
+    plt.ylabel(column)
+    plt.title(f'Top {max_plot} of {column}')
+    plt.show()
+
+
+players_name = games_details['PLAYER_NAME']
+val_cnt = players_name.value_counts().to_frame().reset_index()
+val_cnt.columns = ['PLAYER_NAME', 'Number of games']
+
+st.pyplot(
+    plot_top(
+        val_cnt,
+        column='Number of games',
+        label_col='PLAYER_NAME',
+        max_plot=10))
+
+st.markdown('---')
+
 
 # Download a single file and make its content available as a string.
 
