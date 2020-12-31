@@ -11,6 +11,7 @@ spacy = "*"
 pi = "*"
 matplotlib = "*"
 seaborn = "*"
+plotly = "*"
 
 [dev-packages]
 
