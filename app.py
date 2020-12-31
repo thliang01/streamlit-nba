@@ -327,6 +327,37 @@ stats_prct, stats_other = get_players_stats(
 st.markdown(f'#### Stats comparison between {player_one} and {player_two}')
 st.pyplot(show_player_stats_comparison(stats_prct, stats_other))
 st.markdown('---')
+
+# st.selectbox('Select player_one', ['Stephen Curry','James Harden','Lebron James'])
+# st.multiselect('Multiselect', ['Stephen Curry','James Harden','Lebron James'])
+# # player_one = 'Stephen Curry'
+# # player_two = 'James Harden'
+# # # Function code just hide above because it's a repeat from previous part
+# # stats_prct, stats_other = get_players_stats(
+# #     player_one=player_one, player_two=player_two)
+# #
+# # st.markdown(f'#### Stats comparison between {player_one} and {player_two}')
+# # st.pyplot(show_player_stats_comparison(stats_prct, stats_other))
+# # st.markdown('---')
+
+st.header('Which team has the most winning since 2004 season ?')
+winning_teams = np.where(
+    games['HOME_TEAM_WINS'] == 1,
+    games['HOME_TEAM_ID'],
+    games['VISITOR_TEAM_ID'])
+winning_teams = pd.DataFrame(winning_teams, columns=['TEAM_ID'])
+winning_teams = winning_teams.merge(teams[['TEAM_ID', 'NICKNAME']], on='TEAM_ID')[
+    'NICKNAME'].value_counts().to_frame().reset_index()
+winning_teams.columns = ['TEAM NAME', 'Number of wins']
+
+st.pyplot(
+    plot_top(
+        winning_teams,
+        column='Number of wins',
+        label_col='TEAM NAME',
+        max_plot=10))
+
+
 # Download a single file and make its content available as a string.
 
 
