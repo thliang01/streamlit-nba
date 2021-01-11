@@ -71,7 +71,7 @@ if st.checkbox('Show games'):
 
 data = pd.read_csv('data/NBA2K/nba2k20-full.csv')
 if st.checkbox('Show nba2k20'):
-    st.write(games.data(10))
+    st.write(data.head(10))
 # st.write(df.head(5))
 
 # ----- ----- -----
