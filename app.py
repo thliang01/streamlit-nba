@@ -21,19 +21,17 @@
 
 # More info: https://github.com/thliang01/streamlit-nba
 
-import urllib
-import os
-import streamlit as st
-import pandas as pd
-import numpy as np
-from math import pi
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-import plotly.express as px
-from plotly.subplots import make_subplots
 from datetime import datetime
-from datetime import date
-import plotly.figure_factory as ff
+from math import pi
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+from plotly.subplots import make_subplots
+
 plt.style.use('fivethirtyeight')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
