@@ -4,7 +4,7 @@ run:
 	@streamlit run app.py
 run-container:
 	@docker build -f Dockerfile -t streamlit-nba .
-	@docker run -p 8080:8080 -e PORT=8080 streamlit-nba
+	@docker run -p 80:8080 -e PORT=8080 streamlit-nba
 
 
 gcloud-deploy:
