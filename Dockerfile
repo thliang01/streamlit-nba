@@ -1,7 +1,10 @@
 FROM python:3.8.5-slim
 
+# Allow statements and log messages to immediately appear in the Knative logs
+ENV PYTHONUNBUFFERED True
+
 # remember to expose the port your app'll be exposed on.
-EXPOSE 8501
+EXPOSE 8080
 WORKDIR /app
 
 COPY requirements.txt ./requirements.txt
@@ -11,4 +14,4 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # run it!
-CMD streamlit run app.py
+CMD streamlit run --server.port 8080 --server.enableCORS false app.py
