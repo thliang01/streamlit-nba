@@ -611,14 +611,5 @@ So, the most paid players drom draft round 1, where the max salary is 40.2M. The
 """)
 st.markdown('---')
 
-# @st.cache(show_spinner=False)
-# def get_file_content_as_string(path):
-#     url = 'https://github.com/thliang01/streamlit-nba/master/' + path
-#     response = urllib.request.urlopen(url)
-#     return response.read().decode("utf-8")
-
-
 # if __name__ == "__main__":
 #     main()
-
-# st.button('Hello world !!!')
