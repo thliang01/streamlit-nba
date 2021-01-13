@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2020 Thomas
+# Copyright 2020 Thomas Liang
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -518,37 +518,6 @@ st.plotly_chart(fig)
 st.markdown('About 15% of players are not from college. The highest percents of players have Kentucky and Duke colleges.')
 st.markdown('---')
 
-# st.header('Top-50 players by salary')
-#
-# data['position'] = data['position'].apply(
-#     lambda x: 'F-C' if x == 'C-F' else x)  # union related positions
-# data['position'] = data['position'].apply(lambda x: 'F-G' if x == 'G-F' else x)
-#
-# fig = px.scatter(data.sort_values(by='salary', ascending=False)[:50],
-#                  x="salary", y="age",
-#                  size="rating", color="position",
-#                  title="Top-50 players",
-#                  log_x=True, size_max=20)
-# st.plotly_chart(fig)
-# st.markdown('The most paid players from top-30 are 28+ years old on G and F positions.')
-# st.markdown('---')
-#
-# st.header('Basic regression')
-# fig = px.scatter(
-#     data, x='rating', y='salary', opacity=0.65,
-#     trendline='ols', trendline_color_override='darkblue',
-#     facet_col='position', facet_col_wrap=3, color='salary'
-# )
-# # fig.show()
-# st.plotly_chart(fig)
-#
-# fig = px.scatter(data, x='rating', y='salary', opacity=0.65,
-#                  trendline='ols', trendline_color_override='darkblue',
-#                  facet_col='draft_round', facet_col_wrap=3, color='salary'
-#                 )
-# # fig.show()
-# st.plotly_chart(fig)
-# st.markdown('---')
 
 st.header('Team rating')
 
@@ -605,6 +574,3 @@ draft round 2: 50 % of salary data is between 1.4M and 8.5, median is 1.7M
 So, the most paid players drom draft round 1, where the max salary is 40.2M. The draft round 2 have bigger range of salary data then data of undrafted players, but median of salary from draft round 2 less by 0.8M.
 """)
 st.markdown('---')
-
-# if __name__ == "__main__":
-#     main()
