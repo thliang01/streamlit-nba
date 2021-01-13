@@ -73,11 +73,6 @@ if st.checkbox('Show nba2k20'):
 
 # ----- ----- -----
 
-# Streamlit encourages well-structured code, like starting execution in a main() function.
-# def main():
-#     # Render the readme as markdown using st.markdown.
-#     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
-
 st.title('NBA games Data Visualization')
 """
 ### Dataset with all NBA games from 2004 season to dec 2020
