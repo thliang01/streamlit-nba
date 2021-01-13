@@ -433,7 +433,7 @@ data['team'] = data['team'].fillna('No team')
 # st.pyplot(sns.heatmap(data.corr(),cmap='Blues',annot=True))
 # Download a single file and make its content available as a string.
 
-st.header('Height and weight distriburion')
+st.header('Height and weight distribution')
 
 fig = make_subplots(rows=1, cols=2, specs=[
                     [{"type": "histogram"}, {"type": "histogram"}]])
@@ -481,7 +481,7 @@ fig = px.scatter(data, x="weight", y="height",
 st.plotly_chart(fig)
 st.markdown('---')
 
-st.header('Country and college distriburion')
+st.header('Country and college distribution')
 
 country_count = data['country'].value_counts()
 fig = go.Figure(
